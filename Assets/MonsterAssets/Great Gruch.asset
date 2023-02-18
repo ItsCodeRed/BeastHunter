@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7c0c56b7a2d957148a6b425bcbb2d5c9, type: 3}
+  m_Name: Great Gruch
+  m_EditorClassIdentifier: 
+  monsterName: Great Gruch
+  monsterSprite: {fileID: 21300000, guid: 6721594a4722d3742a7b2cd2a3262145, type: 3}
+  monsterPrefab: {fileID: 7644253885757799985, guid: 065316173a7749147830c9ccfb01a9ae, type: 3}
+  maxHealth: 150
+  meat: 8
+  monsterOffset: {x: -0.5, y: 0.2}
+  additionalMonsters:
+  - {fileID: 11400000, guid: 3bd03f8fc1c24474f9b174e0524d0e77, type: 2}
+  isBig: 1

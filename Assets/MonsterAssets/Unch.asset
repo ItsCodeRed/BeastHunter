@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7c0c56b7a2d957148a6b425bcbb2d5c9, type: 3}
+  m_Name: Unch
+  m_EditorClassIdentifier: 
+  monsterName: Unch
+  monsterSprite: {fileID: 21300000, guid: 72fdb31695563bb47b6439c46c4425ad, type: 3}
+  monsterPrefab: {fileID: 3909884295927646885, guid: 23798dc9e7f2bdf41a91872fc496a542, type: 3}
+  maxHealth: 75
+  meat: 1
+  monsterOffset: {x: 0.7, y: 0.8}
+  isBig: 0

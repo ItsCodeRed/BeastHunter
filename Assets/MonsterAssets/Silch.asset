@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7c0c56b7a2d957148a6b425bcbb2d5c9, type: 3}
+  m_Name: Silch
+  m_EditorClassIdentifier: 
+  monsterName: Silch
+  monsterSprite: {fileID: 21300000, guid: a0552cb36a216c143b494212728ddbac, type: 3}
+  monsterPrefab: {fileID: 3112081316884614416, guid: 29cdc4443254b584b947b52b94b4815f, type: 3}
+  maxHealth: 75
+  meat: 1
+  monsterOffset: {x: 0.7, y: -0.8}
+  isBig: 0
