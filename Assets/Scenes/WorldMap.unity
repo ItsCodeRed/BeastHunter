@@ -12478,9 +12478,7 @@ MonoBehaviour:
   rockFightScenes:
   - CraggyMonsterArena
   bigMonsters:
-  - {fileID: 11400000, guid: 92c9d9964281a4746b050b7432ba3c29, type: 2}
-  - {fileID: 11400000, guid: e3c7e6c04a8c04a4d97957dec3b8fd7e, type: 2}
-  - {fileID: 11400000, guid: 612c3d598245ba9468375d4cf102f787, type: 2}
+  - {fileID: 11400000, guid: b2ddb4cfe503dd74aa4c57cc25048315, type: 2}
   smallMonsters:
   - {fileID: 11400000, guid: c83fe0c03cac71c4c86f24bf657499c6, type: 2}
   - {fileID: 11400000, guid: ed465fe8f2edd6e43845d2f6e35824fc, type: 2}

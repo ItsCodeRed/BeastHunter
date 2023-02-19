@@ -16,10 +16,9 @@ public class Malcch : Enemy
     [SerializeField] private float flySpeed;
     [SerializeField] private float changeTargetRange;
 
-    [SerializeField] private float chargeRange = 8;
-    [SerializeField] private float chanceOfCharge = 50;
     [SerializeField] private float decisionInterval = 3;
 
+    [Header("Swipe")]
     [SerializeField] private float swipeRange = 3;
     [SerializeField] private HitBox swipeHitbox;
     [SerializeField] private HitBox swipeHitbox2;
@@ -28,25 +27,21 @@ public class Malcch : Enemy
     [SerializeField] private float swipeLength = 0.5f;
     [SerializeField] private float swipeDownTime = 0.5f;
 
+    [Header("Stab")]
     [SerializeField] private float stabRange = 3;
     [SerializeField] private HitBox stabHitbox;
-    [SerializeField] private float chanceOfStab = 70;
     [SerializeField] private float stabDelay = 0.5f;
     [SerializeField] private float stabLength = 0.5f;
     [SerializeField] private float stabDownTime = 0.5f;
 
+    [Header("Dive Spin")]
     [SerializeField] private HitBox diveSpinHitbox;
-    [SerializeField] private float chanceOfFlame = 50;
-    [SerializeField] private float flameDelay = 0.5f;
-    [SerializeField] private float flameLength = 0.5f;
-    [SerializeField] private float flameDownTime = 0.5f;
-    [SerializeField] private float flameRange = 3;
 
-    [SerializeField] private HitBox flipHitbox;
-    [SerializeField] private float chanceOfFlip = 50;
-    [SerializeField] private float flipDelay = 0.5f;
-    [SerializeField] private float flipRange = 0.5f;
-    [SerializeField] private float flipDownTime = 0.5f;
+    [Header("Lazer")]
+    [SerializeField] private float chanceOfLazer = 50;
+    [SerializeField] private float lazerDelay = 0.5f;
+    [SerializeField] private Lazer lazerPrefab;
+    [SerializeField] private Transform lazerOrigin;
 
     [SerializeField] private float deathLength;
 
@@ -107,32 +102,12 @@ public class Malcch : Enemy
                     return;
                 }
 
-                //if (displacement.magnitude < flameRange)
-                //{
-                //    float randNum = Random.Range(0f, 100f);
-                //    if (randNum < chanceOfFlame)
-                //    {
-                //        StartCoroutine(FlameRoutine());
-                //        return;
-                //    }
-                //    else if (randNum < chanceOfFlame + chanceOfFlip)
-                //    {
-                //        StartCoroutine(FlipRoutine());
-                //        return;
-                //    }
-                //}
-                //if (displacement.magnitude < chargeRange)
-                //{
-                //    bool isCharging = true;
-
-                //    float randNum = Random.Range(0f, 100f);
-                //    if (randNum > chanceOfCharge)
-                //    {
-                //        isCharging = false;
-                //    }
-
-                //    horizontalMovement = !isCharging ? 0 : Mathf.Sign(displacement.x);
-                //}
+                randNum = Random.Range(0f, 100f);
+                if (randNum < chanceOfLazer)
+                {
+                    StartCoroutine(LazerRoutine());
+                    return;
+                }
             }
         }
 
@@ -179,7 +154,7 @@ public class Malcch : Enemy
         yield return new WaitForSeconds(stabDelay);
 
         float timer = 0;
-        while (timer < swipeLength)
+        while (timer < stabLength)
         {
             Attack(stabHitbox);
             timer += Time.fixedDeltaTime;
@@ -198,6 +173,7 @@ public class Malcch : Enemy
         attacking = true;
         animator.Play("Idle");
 
+        currentFlySpeed = flybySpeed;
         int randomSide = Random.Range(0, 2) == 0 ? -1 : 1;
 
         float timer = 0;
@@ -210,8 +186,6 @@ public class Malcch : Enemy
 
             yield return new WaitForFixedUpdate();
         }
-
-        currentFlySpeed = flybySpeed;
 
         timer = 0;
         while (timer < flybyMaxTime)
@@ -253,26 +227,52 @@ public class Malcch : Enemy
         yield return new WaitForSeconds(swipeDownTime);
     }
 
-    private IEnumerator FlameRoutine()
+    private IEnumerator LazerRoutine()
     {
         attacking = true;
-        animator.Play("FlameBreath");
-        FacePlayer();
+        animator.Play("Idle");
 
-        yield return new WaitForSeconds(flameDelay);
+        Debug.Log("a");
+
+        currentFlySpeed = flybySpeed;
+        int randomSide = Random.Range(0, 2) == 0 ? -1 : 1;
 
         float timer = 0;
-        while (timer < flameLength)
+        while (Vector2.Distance(transform.position, Player.instance.transform.position) < flybyMinDist && timer < flybyMaxChargeLength)
         {
             timer += Time.fixedDeltaTime;
+
+            targetLocation = (Vector2)Player.instance.transform.position + flyOffset + new Vector2(randomSide * flybyMinDist, 0);
+            transform.localScale = new Vector3(-Mathf.Abs(transform.localScale.x) * Mathf.Sign(body.velocity.x), transform.localScale.y, 1f);
+
             yield return new WaitForFixedUpdate();
         }
 
-        yield return new WaitForSeconds(flameDownTime);
+        randomSide *= -1;
+        targetLocation = Vector2.zero;
 
+        Debug.Log("b");
+        animator.Play("BloodLazer");
+
+        yield return new WaitForSeconds(lazerDelay);
+
+        animator.Play("LazerLoop");
+
+        Lazer lazer = Instantiate(lazerPrefab, lazerOrigin);
+        targetLocation = (Vector2)Player.instance.transform.position + flyOffset + new Vector2(randomSide * flybyMinDist, 0);
+
+        while (Vector2.Distance(transform.position, targetLocation) < changeTargetRange)
+        {
+            transform.localScale = new Vector3(-Mathf.Abs(transform.localScale.x) * Mathf.Sign(body.velocity.x), transform.localScale.y, 1f);
+
+            yield return new WaitForFixedUpdate();
+        }
+
+        Destroy(lazer.gameObject);
+
+        currentFlySpeed = flySpeed;
         attacking = false;
     }
-
     public override void Die()
     {
         base.Die();

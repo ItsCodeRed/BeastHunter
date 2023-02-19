@@ -195,7 +195,7 @@ public class Player : MonoBehaviour
         stamina = Mathf.Clamp(stamina + value, 0, maxStamina);
     }
 
-    public void TakeDamage(int damage, Vector2 knockback, float hitLength, float stun)
+    public bool TakeDamage(int damage, Vector2 knockback, float hitLength, float stun)
     {
         if (noHitTimer <= 0)
         {
@@ -225,6 +225,9 @@ public class Player : MonoBehaviour
                 GameManager.instance.ChangePotion(-Mathf.CeilToInt(GameManager.instance.potionAmount / deathResourceLoss));
                 UIManager.instance.DayFinishScreen("You have failed to slay the beast. The village sent a team of medics to save you, at the loss of village resources. The beast ate half of your goods.");
             }
+            return true;
         }
+
+        return false;
     }
 }

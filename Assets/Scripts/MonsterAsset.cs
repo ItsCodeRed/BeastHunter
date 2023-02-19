@@ -21,6 +21,7 @@ public class MonsterInstance
 {
     public MonsterAsset monsterAsset = null;
     public int currentHealth;
+    public int maxHealth;
 
     public MonsterInstance(MonsterAsset asset)
     {

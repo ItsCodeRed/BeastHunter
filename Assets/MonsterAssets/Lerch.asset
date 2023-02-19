@@ -15,7 +15,8 @@ MonoBehaviour:
   monsterName: Lerch
   monsterSprite: {fileID: 21300000, guid: 7b5fb57b7960c60488a4006517395a49, type: 3}
   monsterPrefab: {fileID: 6410999837211447674, guid: 2ee7073897a92cd44bf1cc0699258028, type: 3}
-  maxHealth: 300
+  maxHealth: 250
   meat: 8
   monsterOffset: {x: -0.5, y: 0.2}
+  additionalMonsters: []
   isBig: 1

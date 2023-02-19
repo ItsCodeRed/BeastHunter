@@ -10,13 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7c0c56b7a2d957148a6b425bcbb2d5c9, type: 3}
-  m_Name: Dthaech
+  m_Name: Malcch
   m_EditorClassIdentifier: 
-  monsterName: Dthaech
-  monsterSprite: {fileID: 21300000, guid: 53e3d3ab03e7c3244aee536b0be63a62, type: 3}
-  monsterPrefab: {fileID: 6111324425745722274, guid: f4471af6cf738404cbb1853400cd97b4, type: 3}
-  maxHealth: 175
-  meat: 10
+  monsterName: Malcch
+  monsterSprite: {fileID: 21300000, guid: 4f9a0b648876be14997705fc5422ae5f, type: 3}
+  monsterPrefab: {fileID: 400257465279436840, guid: 4b49584217c11e64285e806decbad091, type: 3}
+  maxHealth: 125
+  meat: 8
   monsterOffset: {x: -0.5, y: 0.2}
   additionalMonsters: []
   isBig: 1

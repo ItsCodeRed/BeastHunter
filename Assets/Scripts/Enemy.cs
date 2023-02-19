@@ -139,12 +139,19 @@ public class Enemy : MonoBehaviour
             if (col.CompareTag("Player"))
             {
                 int modifier = monsterInstance == null ? 1 : (monsterInstance.monsterAsset.isBig ? Mathf.CeilToInt(hitbox.damage * GameManager.instance.attackMultiplier * (GameManager.instance.dayNum - 1)) : 0);
-                Player.instance.TakeDamage(hitbox.damage + modifier, Vector3.Scale(hitbox.knockback, facingVector), hitbox.hitLength, hitbox.stun);
-                if (hitbox.isPoison)
+                if (Player.instance.TakeDamage(hitbox.damage + modifier, Vector3.Scale(hitbox.knockback, facingVector), hitbox.hitLength, hitbox.stun))
                 {
-                    Player.instance.isPoisoned = true;
+                    if (hitbox.isPoison)
+                    {
+                        Player.instance.isPoisoned = true;
+                    }
+                    if (hitbox.lifeSteal > 0)
+                    {
+                        health = Mathf.Min(health + Mathf.RoundToInt((hitbox.damage + modifier) * hitbox.lifeSteal), monsterInstance.monsterAsset.maxHealth + (GameManager.instance.dayNum - 1) * GameManager.instance.healthIncrement);
+                    }
+
+                    return true;
                 }
-                return true;
             }
         }
 
@@ -163,4 +170,5 @@ public struct HitBox
     public float stun;
     public Vector2 knockback;
     public bool isPoison;
+    public float lifeSteal;
 }
