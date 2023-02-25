@@ -9,15 +9,19 @@ public class Lazer : MonoBehaviour
     public float hitLength;
     public float stun;
 
+    public LayerMask hitMask;
+
     public Vector2 dir;
     public GameObject lazerSegmentPrefab;
     public float segmentLength;
 
     private List<GameObject> lazerSegments = new List<GameObject>();
+    [SerializeField] private Transform lazerParticles;
 
     private void FixedUpdate()
     {
-        RaycastHit2D hit = Physics2D.Raycast(transform.position, dir.normalized, 999);
+        Vector2 scaledDir = Vector2.Scale(dir, new Vector2(Mathf.Sign(transform.lossyScale.x), 1));
+        RaycastHit2D hit = Physics2D.Raycast(transform.position, scaledDir.normalized, 999, hitMask);
 
         int lazerSegmentNum = Mathf.CeilToInt(hit.distance / segmentLength);
         if (lazerSegments.Count > lazerSegmentNum)
@@ -38,8 +42,10 @@ public class Lazer : MonoBehaviour
 
         for (int i = 0; i < lazerSegmentNum; i++)
         {
-            lazerSegments[i].transform.position = transform.position + (Vector3)dir.normalized * ((hit.distance - segmentLength / 2f) * (i + 1) / (float)lazerSegmentNum);
+            lazerSegments[i].transform.position = transform.position + (Vector3)scaledDir.normalized * ((hit.distance - segmentLength / 2f) * (i + 1) / (float)lazerSegmentNum);
         }
+
+        lazerParticles.position = lazerSegments[lazerSegments.Count - 1].transform.position;
 
         if (hit.collider.CompareTag("Player"))
         {

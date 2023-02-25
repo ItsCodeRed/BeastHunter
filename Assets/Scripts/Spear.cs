@@ -100,7 +100,7 @@ public class Spear : MonoBehaviour
 
         foreach (Collider2D col in cols)
         {
-            if (col.gameObject.CompareTag("Enemy"))
+            if (col.gameObject.CompareTag("Enemy") && !col.isTrigger)
             {
                 Vector2 facingVector = new Vector2(Mathf.Sign((col.transform.position - transform.parent.parent.position).x), 1);
 

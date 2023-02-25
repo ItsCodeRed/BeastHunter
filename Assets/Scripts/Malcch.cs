@@ -35,7 +35,18 @@ public class Malcch : Enemy
     [SerializeField] private float stabDownTime = 0.5f;
 
     [Header("Dive Spin")]
+    [SerializeField] private float chanceOfDiveSpin = 50;
     [SerializeField] private HitBox diveSpinHitbox;
+    [SerializeField] private HitBox diveSpinHitbox2;
+    [SerializeField] private float diveSpinMinDist;
+    [SerializeField] private float diveSpinMaxChargeLength;
+    [SerializeField] private float diveSpinStartSpeed;
+    [SerializeField] private float diveSpinEndSpeed;
+    [SerializeField] private float diveSpinChargeDelay = 0.5f;
+    [SerializeField] private float diveSpinAttackDelay = 0.5f;
+    [SerializeField] private float diveSpinAttackDelay2 = 0.5f;
+    [SerializeField] private float diveSpinLength = 0.5f;
+    [SerializeField] private float diveSpinDownTime = 0.5f;
 
     [Header("Lazer")]
     [SerializeField] private float chanceOfLazer = 50;
@@ -43,7 +54,15 @@ public class Malcch : Enemy
     [SerializeField] private Lazer lazerPrefab;
     [SerializeField] private Transform lazerOrigin;
 
+    [SerializeField] private float tiredLength = 7;
     [SerializeField] private float deathLength;
+
+    [Header("Hitboxes")]
+    [SerializeField] private GameObject mainHitbox;
+    [SerializeField] private GameObject landingHitbox;
+    [SerializeField] private GameObject tiredHitbox;
+    [SerializeField] private GameObject bellyHitbox;
+    [SerializeField] private GameObject diveHitbox;
 
     [SerializeField] AudioSource boomSound;
 
@@ -52,6 +71,12 @@ public class Malcch : Enemy
     private float decisionTimer = 0;
     public bool attacking = false;
     private bool applyFlyMovement = true;
+    private bool isFlying = true;
+    private Lazer lazerInstance;
+
+    private bool hitSomething = false;
+
+    public int exhaustionPoints = 0;
 
     private float currentFlySpeed;
 
@@ -82,11 +107,6 @@ public class Malcch : Enemy
 
             Vector2 displacement = Player.instance.transform.position - transform.position;
 
-            if (displacement.magnitude < stabRange && !attacking)
-            {
-                StartCoroutine(StabRoutine());
-                return;
-            }
             if (decisionTimer > 0)
             {
                 decisionTimer -= Time.fixedDeltaTime;
@@ -98,6 +118,7 @@ public class Malcch : Enemy
                 float randNum = Random.Range(0f, 100f);
                 if (randNum < chanceOfSwipe)
                 {
+                    exhaustionPoints += 2;
                     StartCoroutine(FlybyRoutine());
                     return;
                 }
@@ -105,9 +126,27 @@ public class Malcch : Enemy
                 randNum = Random.Range(0f, 100f);
                 if (randNum < chanceOfLazer)
                 {
+                    exhaustionPoints += 2;
                     StartCoroutine(LazerRoutine());
                     return;
                 }
+
+                randNum = Random.Range(0f, 100f);
+                if (randNum < chanceOfDiveSpin)
+                {
+                    exhaustionPoints += 2;
+                    StartCoroutine(DiveSpinRoutine());
+                    return;
+                }
+
+                exhaustionPoints = Mathf.Max(exhaustionPoints - 3, 0);
+            }
+
+            if (displacement.magnitude < stabRange && !attacking)
+            {
+                exhaustionPoints += 2;
+                StartCoroutine(StabRoutine());
+                return;
             }
         }
 
@@ -121,6 +160,8 @@ public class Malcch : Enemy
             animator.Play("Idle");
             transform.localScale = new Vector3(-Mathf.Abs(transform.localScale.x) * Mathf.Sign(body.velocity.x), transform.localScale.y, 1f);
         }
+
+        if (!isFlying) return;
 
         if (applyFlyMovement)
         {
@@ -141,6 +182,17 @@ public class Malcch : Enemy
         else
         {
             body.velocity = Vector2.zero;
+        }
+    }
+
+    public override void OnHit()
+    {
+        exhaustionPoints++;
+
+        if (exhaustionPoints >= 20)
+        {
+            StopAllCoroutines();
+            StartCoroutine(TiredRoutine());
         }
     }
 
@@ -208,6 +260,73 @@ public class Malcch : Enemy
         attacking = false;
     }
 
+    private IEnumerator DiveSpinRoutine()
+    {
+        attacking = true;
+        animator.Play("Idle");
+
+        currentFlySpeed = flybySpeed;
+        int randomSide = Random.Range(0, 2) == 0 ? -1 : 1;
+
+        float timer = 0;
+        while (Vector2.Distance(transform.position, Player.instance.transform.position) < diveSpinMinDist && timer < diveSpinMaxChargeLength)
+        {
+            timer += Time.fixedDeltaTime;
+
+            targetLocation = (Vector2)Player.instance.transform.position + flyOffset + new Vector2(randomSide * diveSpinMinDist, 0);
+            transform.localScale = new Vector3(-Mathf.Abs(transform.localScale.x) * Mathf.Sign(body.velocity.x), transform.localScale.y, 1f);
+
+            yield return new WaitForFixedUpdate();
+        }
+
+        animator.Play("DiveSpin");
+
+        targetLocation = Vector2.zero;
+        transform.localScale = new Vector3(-Mathf.Abs(transform.localScale.x) * Mathf.Sign(Player.instance.transform.position.x - transform.position.x), transform.localScale.y, 1f);
+
+        yield return new WaitForSeconds(diveSpinChargeDelay);
+
+        mainHitbox.SetActive(false);
+        diveHitbox.SetActive(true);
+        hitSomething = false;
+        currentFlySpeed = diveSpinStartSpeed;
+        targetLocation = (Vector2)Player.instance.transform.position;
+        targetLocation.y = -7;
+        body.velocity = (targetLocation - (Vector2)transform.position).normalized * diveSpinStartSpeed;
+
+        yield return new WaitUntil(() => hitSomething);
+
+        animator.Play("SpinOnGround");
+
+        timer = 0;
+        while (timer < diveSpinAttackDelay + diveSpinLength)
+        {
+            timer += Time.fixedDeltaTime;
+
+            body.gravityScale = 1;
+            targetLocation = Vector2.right * Mathf.Sign(targetLocation.x - transform.position.x) * 999;
+
+            float ratio = timer / (diveSpinAttackDelay + diveSpinLength);
+            currentFlySpeed = diveSpinStartSpeed * (1 - ratio) + diveSpinEndSpeed * ratio;
+
+            if (timer > diveSpinAttackDelay)
+            {
+                Attack(timer > diveSpinAttackDelay2 ? diveSpinHitbox2 : diveSpinHitbox);
+            }
+
+            yield return new WaitForFixedUpdate();
+        }
+
+        diveHitbox.SetActive(false);
+        mainHitbox.SetActive(true);
+        body.gravityScale = 0;
+        currentFlySpeed = flySpeed;
+        targetLocation = Vector2.zero;
+        yield return new WaitForSeconds(diveSpinDownTime);
+
+        attacking = false;
+    }
+
 
     private IEnumerator SwipeRoutine()
     {
@@ -232,8 +351,6 @@ public class Malcch : Enemy
         attacking = true;
         animator.Play("Idle");
 
-        Debug.Log("a");
-
         currentFlySpeed = flybySpeed;
         int randomSide = Random.Range(0, 2) == 0 ? -1 : 1;
 
@@ -248,45 +365,118 @@ public class Malcch : Enemy
             yield return new WaitForFixedUpdate();
         }
 
-        randomSide *= -1;
         targetLocation = Vector2.zero;
 
-        Debug.Log("b");
         animator.Play("BloodLazer");
 
         yield return new WaitForSeconds(lazerDelay);
 
         animator.Play("LazerLoop");
 
-        Lazer lazer = Instantiate(lazerPrefab, lazerOrigin);
-        targetLocation = (Vector2)Player.instance.transform.position + flyOffset + new Vector2(randomSide * flybyMinDist, 0);
+        lazerInstance = Instantiate(lazerPrefab, lazerOrigin);
+        targetLocation = (Vector2)Player.instance.transform.position + flyOffset + new Vector2(-randomSide * flybyMinDist, 0);
 
-        while (Vector2.Distance(transform.position, targetLocation) < changeTargetRange)
+        while (Vector2.Distance(transform.position, targetLocation) > changeTargetRange)
         {
             transform.localScale = new Vector3(-Mathf.Abs(transform.localScale.x) * Mathf.Sign(body.velocity.x), transform.localScale.y, 1f);
 
             yield return new WaitForFixedUpdate();
         }
 
-        Destroy(lazer.gameObject);
+        Destroy(lazerInstance.gameObject);
 
         currentFlySpeed = flySpeed;
         attacking = false;
     }
+
+    private IEnumerator FallDownRoutine()
+    {
+        isFlying = false;
+        horizontalMovement = 0;
+        exhaustionPoints = 0;
+        applyHorizontalMovement = true;
+        mainHitbox.SetActive(false);
+        landingHitbox.SetActive(true);
+        bellyHitbox.SetActive(false);
+        diveHitbox.SetActive(false);
+        if (lazerInstance != null)
+        {
+            Destroy(lazerInstance.gameObject);
+        }
+        body.gravityScale = 1;
+
+        animator.Play("Fall");
+
+        while (!isGrounded)
+        {
+            body.velocity = new Vector2(0, Mathf.Min(body.velocity.y, 0));
+
+            yield return new WaitForFixedUpdate();
+        }
+
+        yield return new WaitUntil(() => isGrounded);
+        tiredHitbox.SetActive(true);
+    }
+
+    private IEnumerator TiredRoutine()
+    {
+        attacking = true;
+        currentFlySpeed = flySpeed;
+        yield return FallDownRoutine();
+
+        bellyHitbox.SetActive(true);
+        animator.Play("Pant");
+
+        Vector2 pos = transform.position;
+        float timer = 0;
+        while (timer < tiredLength)
+        {
+            timer += Time.fixedDeltaTime;
+
+            if (isGrounded)
+            {
+                body.velocity = new Vector2(0, Mathf.Min(body.velocity.y, 0));
+                transform.position = pos;
+            }
+            else
+            {
+                pos = transform.position;
+            }
+
+            exhaustionPoints = 0;
+
+            yield return new WaitForFixedUpdate();
+        }
+
+        landingHitbox.SetActive(false);
+        mainHitbox.SetActive(true);
+        tiredHitbox.SetActive(false);
+        bellyHitbox.SetActive(false);
+        exhaustionPoints = 0;
+        body.gravityScale = 0;
+        attacking = false;
+        applyHorizontalMovement = false;
+        isFlying = true;
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        hitSomething = true;
+    }
+
     public override void Die()
     {
         base.Die();
-        gameObject.layer = LayerMask.NameToLayer("Corpse");
+        tiredHitbox.layer = LayerMask.NameToLayer("Corpse");
         body.sharedMaterial = corpseMat;
-        applyHorizontalMovement = false;
-        animator.Play("Dead");
         StopAllCoroutines();
         StartCoroutine(DeathRoutine());
     }
 
     private IEnumerator DeathRoutine()
     {
-        yield return new WaitForSeconds(deathLength);
+        yield return FallDownRoutine();
         boomSound.Play();
+        animator.Play("Dead");
     }
 }

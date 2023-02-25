@@ -58,10 +58,17 @@ public class Enemy : MonoBehaviour
                 Die();
             }
 
+            OnHit();
+
             return true;
         }
 
         return false;
+    }
+
+    public virtual void OnHit()
+    {
+
     }
 
     public virtual void FixedUpdate()
