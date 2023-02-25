@@ -14,6 +14,8 @@ public class GameManager : MonoBehaviour
     public int meatMax;
     public int potionAmount;
     public int potionMax;
+    public int antidoteAmount;
+    public int antidoteMax;
 
     [HideInInspector]
     public List<Zone> previousMap = new List<Zone>();
@@ -95,6 +97,12 @@ public class GameManager : MonoBehaviour
         Inventory.instance.ChangePotionAmount(potionAmount);
     }
 
+    public void ChangeAntidote(int antidote)
+    {
+        antidoteAmount = Mathf.Clamp(antidoteAmount + antidote, 0, antidoteMax);
+        Inventory.instance.ChangeAntidoteAmount(antidoteAmount);
+    }
+
     public void ChangeVillageFood(int food)
     {
         villageFood = Mathf.Clamp(villageFood + food, 0, villageFoodMax);
@@ -109,6 +117,8 @@ public class GameManager : MonoBehaviour
         Inventory.instance.ChangeMeatAmount(0);
         potionAmount = 0;
         Inventory.instance.ChangePotionAmount(0);
+        antidoteAmount = 0;
+        Inventory.instance.ChangeAntidoteAmount(0);
         targetZoneId = 0;
         previousMap = new List<Zone>();
         monsters = new List<MonsterInstance>();

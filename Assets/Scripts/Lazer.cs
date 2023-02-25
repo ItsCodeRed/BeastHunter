@@ -45,7 +45,10 @@ public class Lazer : MonoBehaviour
             lazerSegments[i].transform.position = transform.position + (Vector3)scaledDir.normalized * ((hit.distance - segmentLength / 2f) * (i + 1) / (float)lazerSegmentNum);
         }
 
-        lazerParticles.position = lazerSegments[lazerSegments.Count - 1].transform.position;
+        if (lazerSegments.Count > 0)
+        {
+            lazerParticles.position = lazerSegments[lazerSegments.Count - 1].transform.position;
+        }
 
         if (hit.collider.CompareTag("Player"))
         {

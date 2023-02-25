@@ -51,6 +51,7 @@ public class Malcch : Enemy
     [Header("Lazer")]
     [SerializeField] private float chanceOfLazer = 50;
     [SerializeField] private float lazerDelay = 0.5f;
+    [SerializeField] private float maxLazerLength = 5f;
     [SerializeField] private Lazer lazerPrefab;
     [SerializeField] private Transform lazerOrigin;
 
@@ -123,16 +124,14 @@ public class Malcch : Enemy
                     return;
                 }
 
-                randNum = Random.Range(0f, 100f);
-                if (randNum < chanceOfLazer)
+                if (randNum < chanceOfSwipe + chanceOfLazer)
                 {
                     exhaustionPoints += 2;
                     StartCoroutine(LazerRoutine());
                     return;
                 }
 
-                randNum = Random.Range(0f, 100f);
-                if (randNum < chanceOfDiveSpin)
+                if (randNum < chanceOfSwipe + chanceOfLazer + chanceOfDiveSpin)
                 {
                     exhaustionPoints += 2;
                     StartCoroutine(DiveSpinRoutine());
@@ -229,7 +228,7 @@ public class Malcch : Enemy
         int randomSide = Random.Range(0, 2) == 0 ? -1 : 1;
 
         float timer = 0;
-        while (Vector2.Distance(transform.position, Player.instance.transform.position) < flybyMinDist && timer < flybyMaxChargeLength)
+        while (Vector2.Distance(transform.position, Player.instance.transform.position + (Vector3)flyOffset) < flybyMinDist && timer < flybyMaxChargeLength)
         {
             timer += Time.fixedDeltaTime;
 
@@ -269,7 +268,7 @@ public class Malcch : Enemy
         int randomSide = Random.Range(0, 2) == 0 ? -1 : 1;
 
         float timer = 0;
-        while (Vector2.Distance(transform.position, Player.instance.transform.position) < diveSpinMinDist && timer < diveSpinMaxChargeLength)
+        while (Vector2.Distance(transform.position, Player.instance.transform.position + (Vector3)flyOffset) < diveSpinMinDist && timer < diveSpinMaxChargeLength)
         {
             timer += Time.fixedDeltaTime;
 
@@ -355,7 +354,7 @@ public class Malcch : Enemy
         int randomSide = Random.Range(0, 2) == 0 ? -1 : 1;
 
         float timer = 0;
-        while (Vector2.Distance(transform.position, Player.instance.transform.position) < flybyMinDist && timer < flybyMaxChargeLength)
+        while (Vector2.Distance(transform.position, Player.instance.transform.position + (Vector3)flyOffset) < flybyMinDist && timer < flybyMaxChargeLength)
         {
             timer += Time.fixedDeltaTime;
 
@@ -364,6 +363,7 @@ public class Malcch : Enemy
 
             yield return new WaitForFixedUpdate();
         }
+        randomSide = (int)Mathf.Sign(transform.position.x - Player.instance.transform.position.x);
 
         targetLocation = Vector2.zero;
 
@@ -374,10 +374,14 @@ public class Malcch : Enemy
         animator.Play("LazerLoop");
 
         lazerInstance = Instantiate(lazerPrefab, lazerOrigin);
-        targetLocation = (Vector2)Player.instance.transform.position + flyOffset + new Vector2(-randomSide * flybyMinDist, 0);
+        Vector2 pos = (Vector2)Player.instance.transform.position + flyOffset + new Vector2(-randomSide * flybyMinDist, 0);
+        float timer2 = 0;
 
-        while (Vector2.Distance(transform.position, targetLocation) > changeTargetRange)
+        while (Vector2.Distance(transform.position, pos) > changeTargetRange && timer2 < maxLazerLength)
         {
+            timer2 += Time.fixedDeltaTime;
+
+            targetLocation = pos;
             transform.localScale = new Vector3(-Mathf.Abs(transform.localScale.x) * Mathf.Sign(body.velocity.x), transform.localScale.y, 1f);
 
             yield return new WaitForFixedUpdate();
@@ -433,9 +437,9 @@ public class Malcch : Enemy
         {
             timer += Time.fixedDeltaTime;
 
+            body.velocity = new Vector2(0, Mathf.Min(body.velocity.y, 0));
             if (isGrounded)
             {
-                body.velocity = new Vector2(0, Mathf.Min(body.velocity.y, 0));
                 transform.position = pos;
             }
             else
@@ -476,6 +480,7 @@ public class Malcch : Enemy
     private IEnumerator DeathRoutine()
     {
         yield return FallDownRoutine();
+        body.velocity = Vector2.zero;
         boomSound.Play();
         animator.Play("Dead");
     }

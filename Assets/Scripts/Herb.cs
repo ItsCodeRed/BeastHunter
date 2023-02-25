@@ -14,7 +14,12 @@ public class Herb : MonoBehaviour
 
         if (inRange && Input.GetKeyDown(KeyCode.F))
         {
-            Player.instance.CollectHerb(gameObject);
+            CollectItem();
         }
+    }
+
+    public virtual void CollectItem()
+    {
+        Player.instance.CollectHerb(gameObject);
     }
 }

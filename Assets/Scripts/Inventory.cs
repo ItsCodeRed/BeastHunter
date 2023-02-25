@@ -15,9 +15,11 @@ public class Inventory : MonoBehaviour
     [SerializeField] private Image meatFrame;
     [SerializeField] private TMP_Text potionSlot;
     [SerializeField] private Image potionFrame;
+    [SerializeField] private TMP_Text antidoteSlot;
+    [SerializeField] private Image antidoteFrame;
 
     public bool canSelect = true;
-    public bool selectingPotion = true;
+    public InventoryItems selectedItem;
 
     private void Awake()
     {
@@ -28,6 +30,7 @@ public class Inventory : MonoBehaviour
     {
         meatSlot.text = "x" + GameManager.instance.meatAmount.ToString();
         potionSlot.text = "x" + GameManager.instance.potionAmount.ToString();
+        antidoteSlot.text = "x" + GameManager.instance.antidoteAmount.ToString();
 
         if (canSelect)
         {
@@ -39,22 +42,31 @@ public class Inventory : MonoBehaviour
     {
         if (Input.mouseScrollDelta.y != 0 && canSelect)
         {
-            selectingPotion = !selectingPotion;
+            int index = Input.mouseScrollDelta.y > 0 ? (((int)selectedItem) + 1) % 3 : (selectedItem == 0 ? 2 : ((int)selectedItem) - 1);
+            selectedItem = (InventoryItems)index;
             ChangeSelectFrame();
         }
     }
 
     private void ChangeSelectFrame()
     {
-        if (selectingPotion)
+        meatFrame.sprite = frameSprite;
+        potionFrame.sprite = frameSprite;
+        antidoteFrame.sprite = frameSprite;
+
+        switch (selectedItem)
         {
-            meatFrame.sprite = frameSprite;
-            potionFrame.sprite = selectFrameSprite;
-        }
-        else
-        {
-            meatFrame.sprite = selectFrameSprite;
-            potionFrame.sprite = frameSprite;
+            case InventoryItems.potion:
+                potionFrame.sprite = selectFrameSprite;
+                break;
+            case InventoryItems.antidote:
+                antidoteFrame.sprite = selectFrameSprite;
+                break;
+            case InventoryItems.meat:
+                meatFrame.sprite = selectFrameSprite;
+                break;
+            default:
+                break;
         }
     }
 
@@ -67,4 +79,16 @@ public class Inventory : MonoBehaviour
     {
         potionSlot.text = "x" + potionAmount;
     }
+
+    public void ChangeAntidoteAmount(int antidoteAmount)
+    {
+        antidoteSlot.text = "x" + antidoteAmount;
+    }
+}
+
+public enum InventoryItems
+{
+    potion = 0,
+    antidote,
+    meat,
 }

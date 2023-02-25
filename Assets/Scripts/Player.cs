@@ -124,15 +124,31 @@ public class Player : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.E))
         {
-            if (Inventory.instance.selectingPotion && GameManager.instance.potionAmount > 0 && health < maxHealth && !healing)
+            switch (Inventory.instance.selectedItem)
             {
-                StartCoroutine(nameof(HealRoutine));
-            }
-            else if (!Inventory.instance.selectingPotion && GameManager.instance.meatAmount > 0)
-            {
-                maxStamina += meatStaminaAmount;
-                stamina = maxStamina;
-                GameManager.instance.ChangeMeat(-1);
+                case InventoryItems.potion:
+                    if (GameManager.instance.potionAmount > 0 && health < maxHealth && !healing)
+                    {
+                        StartCoroutine(nameof(HealRoutine));
+                    }
+                    break;
+                case InventoryItems.antidote:
+                    if (GameManager.instance.antidoteAmount > 0)
+                    {
+                        isPoisoned = false;
+                        GameManager.instance.ChangeAntidote(-1);
+                    }
+                    break;
+                case InventoryItems.meat:
+                    if (GameManager.instance.meatAmount > 0)
+                    {
+                        maxStamina += meatStaminaAmount;
+                        stamina = maxStamina;
+                        GameManager.instance.ChangeMeat(-1);
+                    }
+                    break;
+                default:
+                    break;
             }
         }
     }

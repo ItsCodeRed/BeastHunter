@@ -278,6 +278,7 @@ MonoBehaviour:
   knockbackResistence: 1
   stunResistence: 1
   movementSpeed: 12
+  bloodParticle: {fileID: 2299238655300223705, guid: fac92a5b697db9e44bfc729fa57ad4f2, type: 3}
   hitMask:
     serializedVersion: 2
     m_Bits: 8
@@ -316,7 +317,7 @@ MonoBehaviour:
     knockback: {x: 20, y: 0}
     isPoison: 0
     lifeSteal: 2
-  chanceOfSwipe: 40
+  chanceOfSwipe: 50
   swipeDelay: 0.4
   swipeLength: 0.1
   swipeDownTime: 0.1
@@ -334,7 +335,7 @@ MonoBehaviour:
   stabDelay: 0.5
   stabLength: 0.1
   stabDownTime: 0.3
-  chanceOfDiveSpin: 75
+  chanceOfDiveSpin: 30
   diveSpinHitbox:
     size: {x: 12.259359, y: 4.6952834}
     displacement: {x: 0.2473335, y: -0.32229885}
@@ -364,8 +365,9 @@ MonoBehaviour:
   diveSpinAttackDelay2: 0.3
   diveSpinLength: 0.8
   diveSpinDownTime: 0.2
-  chanceOfLazer: 33.333332
+  chanceOfLazer: 15
   lazerDelay: 0.4
+  maxLazerLength: 5
   lazerPrefab: {fileID: 3850885846846576159, guid: 1d50306c4d0f75c42a22cd8515a240cd, type: 3}
   lazerOrigin: {fileID: 6446391754345665500}
   tiredLength: 7

@@ -15,6 +15,7 @@ public class Enemy : MonoBehaviour
     [SerializeField] protected float knockbackResistence = 1;
     [SerializeField] protected float stunResistence = 1;
     [SerializeField] protected float movementSpeed = 12;
+    [SerializeField] protected BloodParticle bloodParticle;
 
     public LayerMask hitMask;
 
@@ -155,6 +156,8 @@ public class Enemy : MonoBehaviour
                     if (hitbox.lifeSteal > 0)
                     {
                         health = Mathf.Min(health + Mathf.RoundToInt((hitbox.damage + modifier) * hitbox.lifeSteal), monsterInstance.monsterAsset.maxHealth + (GameManager.instance.dayNum - 1) * GameManager.instance.healthIncrement);
+                        BloodParticle blood = Instantiate(bloodParticle, Player.instance.transform.position, Quaternion.identity);
+                        blood.target = transform;
                     }
 
                     return true;
