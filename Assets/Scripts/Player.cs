@@ -28,6 +28,8 @@ public class Player : MonoBehaviour
 
     public float healDelay;
     public int healAmount;
+    public float antidoteDelay;
+    public float antidoteDownTime;
     public float poisonSpeed;
     public int poisonAmount;
     public int meatStaminaAmount;
@@ -109,6 +111,7 @@ public class Player : MonoBehaviour
         if (movement.isRolling)
         {
             StopCoroutine(nameof(HealRoutine));
+            StopCoroutine(nameof(AntidoteRoutine));
             if (herbRoutine != null)
             {
                 StopCoroutine(herbRoutine);
@@ -133,10 +136,9 @@ public class Player : MonoBehaviour
                     }
                     break;
                 case InventoryItems.antidote:
-                    if (GameManager.instance.antidoteAmount > 0)
+                    if (GameManager.instance.antidoteAmount > 0 && !healing)
                     {
-                        isPoisoned = false;
-                        GameManager.instance.ChangeAntidote(-1);
+                        StartCoroutine(nameof(AntidoteRoutine));
                     }
                     break;
                 case InventoryItems.meat:
@@ -174,6 +176,24 @@ public class Player : MonoBehaviour
         }
 
         if (healing) yield return new WaitForSeconds(healDownTime);
+
+        spear.SetActive(true);
+        healing = false;
+    }
+
+    private IEnumerator AntidoteRoutine()
+    {
+        movement.body.velocity = Vector2.zero;
+        animator.Play("Antidote");
+        healing = true;
+        spear.SetActive(false);
+
+        if (healing) yield return new WaitForSeconds(antidoteDelay);
+
+        isPoisoned = false;
+        GameManager.instance.ChangeAntidote(-1);
+
+        if (healing) yield return new WaitForSeconds(antidoteDownTime);
 
         spear.SetActive(true);
         healing = false;

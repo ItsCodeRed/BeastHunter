@@ -6,6 +6,7 @@ using UnityEngine.Audio;
 public class Lerch : Enemy
 {
     [SerializeField] Projectile barbPrefab;
+    [SerializeField] GameObject windPrefab;
 
     [SerializeField] private float hitRange = 3;
     [SerializeField] private float jumpInterval = 3;
@@ -44,6 +45,7 @@ public class Lerch : Enemy
 
     [SerializeField] Transform peckBarbSpawn;
     [SerializeField] Transform barbSpawn;
+    [SerializeField] Transform windParticleSpawn;
 
     [SerializeField] Collider2D legCollider;
 
@@ -126,6 +128,9 @@ public class Lerch : Enemy
 
         FacePlayer();
         Vector2 facingVector = new Vector2(Mathf.Sign(displacement.x), 1);
+
+        GameObject wind = Instantiate(windPrefab, windParticleSpawn.transform.position, Quaternion.identity);
+        wind.transform.localScale = new Vector2(-Mathf.Sign(displacement.x), 1);
 
         legCollider.enabled = false;
         body.velocity = Vector2.Scale(wingAttackVel, facingVector);

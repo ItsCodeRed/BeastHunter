@@ -9,27 +9,27 @@ EditorBuildSettings:
     path: Assets/Scenes/WorldMap.unity
     guid: 2cda990e2423bbf4892e6590ba056729
   - enabled: 1
-    path: Assets/Scenes/CraggyMovingLevel1.unity
+    path: Assets/Scenes/CraggyMovingLevelS1.unity
     guid: 72abc697590aa7d4aae133de3b27007c
   - enabled: 1
-    path: Assets/Scenes/CraggyMonsterArena.unity
+    path: Assets/Scenes/CraggyMonsterArena1.unity
     guid: 1a1d5d1e587f51f43a8eb1375b242b8e
   - enabled: 1
-    path: Assets/Scenes/GrassyMonsterArena.unity
+    path: Assets/Scenes/GrassyMonsterArena1.unity
     guid: 25c41b286d17ceb40b22e418769eda64
   - enabled: 1
-    path: Assets/Scenes/GrassyMovingLevel1.unity
+    path: Assets/Scenes/GrassyMovingLevelS1.unity
     guid: adf27e30650602d449c3e92f1932c6d0
   - enabled: 1
-    path: Assets/Scenes/GrassyMovingLevel2.unity
+    path: Assets/Scenes/GrassyMovingLevelM1.unity
     guid: d8bcc762f5621b34494e77242cc432f4
   - enabled: 1
-    path: Assets/Scenes/GrassyMovingLevel3.unity
+    path: Assets/Scenes/GrassyMovingLevelL1.unity
     guid: 6354a8c8e0299954dbb565252e768c2b
   - enabled: 1
-    path: Assets/Scenes/CraggyMovingLevel3.unity
+    path: Assets/Scenes/CraggyMovingLevelL1.unity
     guid: dc6d48fa109d91f458b1d9df84a4b115
   - enabled: 1
-    path: Assets/Scenes/CraggyMovingLevel2.unity
+    path: Assets/Scenes/CraggyMovingLevelM1.unity
     guid: 135a9df29b869344998d35400f5b1b11
   m_configObjects: {}

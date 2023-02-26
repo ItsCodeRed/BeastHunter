@@ -40,7 +40,10 @@ public class Projectile : MonoBehaviour
 
     private IEnumerator DeathRoutine()
     {
-        anim.Play(deathAnimation);
+        if (!string.IsNullOrEmpty(deathAnimation))
+        {
+            anim.Play(deathAnimation);
+        }
         body.isKinematic = true;
         yield return new WaitForSeconds(deathLength);
         Destroy(gameObject);

@@ -26,7 +26,7 @@ public class Hexagon : MonoBehaviour
             && (WorldMapManager.instance.map[id].type != ZoneType.Village || (GameManager.instance.meatAmount > 0 && GameManager.instance.villageFood < GameManager.instance.villageFoodMax)))
         {
             sprite.color = startColor * new Color(darkenValue, darkenValue, darkenValue);
-            if (Input.GetMouseButtonDown(0))
+            if (Input.GetMouseButtonUp(0))
             {
                 WorldMapManager.instance.TravelTo(id);
                 onClick.Invoke();

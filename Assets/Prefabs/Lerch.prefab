@@ -1,5 +1,36 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &5064959085175484919
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 167699317426902346}
+  m_Layer: 8
+  m_Name: WindParticleSpawn
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &167699317426902346
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5064959085175484919}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 2.14, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 6410999837211447672}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &6410999837211447622
 GameObject:
   m_ObjectHideFlags: 0
@@ -38,6 +69,7 @@ Transform:
   m_Children:
   - {fileID: 6410999838320806289}
   - {fileID: 6410999837219784217}
+  - {fileID: 167699317426902346}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -133,12 +165,15 @@ MonoBehaviour:
   knockbackResistence: 4
   stunResistence: 10
   movementSpeed: 12
+  bloodParticle: {fileID: 0}
   hitMask:
     serializedVersion: 2
     m_Bits: 8
   isDead: 0
+  additionalEnemies: []
   health: 2000
   barbPrefab: {fileID: 9091748301153434763, guid: 83675a6510f1e81408c51e59b9f8dbdd, type: 3}
+  windPrefab: {fileID: 8869253140702788415, guid: 8acf237773350974095644ab853b908e, type: 3}
   hitRange: 6
   jumpInterval: 1
   chanceOfJump: 60
@@ -173,6 +208,7 @@ MonoBehaviour:
     stun: 1
     knockback: {x: 12, y: 20}
     isPoison: 0
+    lifeSteal: 0
   wingAttackSecondHitbox:
     size: {x: 9.894042, y: 8.515877}
     displacement: {x: 4.005502, y: -0.14305419}
@@ -182,6 +218,7 @@ MonoBehaviour:
     stun: 1
     knockback: {x: 12, y: 20}
     isPoison: 0
+    lifeSteal: 0
   peckAttackHitbox:
     size: {x: 5.7393584, y: 9.319456}
     displacement: {x: 2.65108, y: 0.7025837}
@@ -191,8 +228,10 @@ MonoBehaviour:
     stun: 0.5
     knockback: {x: 15, y: 7}
     isPoison: 0
+    lifeSteal: 0
   peckBarbSpawn: {fileID: 6410999838320806289}
   barbSpawn: {fileID: 6410999837219784217}
+  windParticleSpawn: {fileID: 167699317426902346}
   legCollider: {fileID: 6410999837211447676}
   boomSound: {fileID: 5607083674508014564}
 --- !u!61 &6410999837211447676

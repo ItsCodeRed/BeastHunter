@@ -635,6 +635,8 @@ MonoBehaviour:
   noKnockback: 0
   healDelay: 0.2
   healAmount: 25
+  antidoteDelay: 0.7
+  antidoteDownTime: 0.3
   poisonSpeed: 1
   poisonAmount: 1
   meatStaminaAmount: 10
@@ -834,6 +836,8 @@ MonoBehaviour:
     hitLength: 0.3
     stun: 0.5
     knockback: {x: 12, y: 7}
+    isPoison: 0
+    lifeSteal: 0
   spearSlashHitBox:
     size: {x: 1.319302, y: 2.301583}
     displacement: {x: -2.492804, y: -0.7732215}
@@ -842,6 +846,8 @@ MonoBehaviour:
     hitLength: 0.2
     stun: 0.5
     knockback: {x: 7, y: 7}
+    isPoison: 0
+    lifeSteal: 0
   spearSound: {fileID: 2338556825604188210}
 --- !u!61 &2828761181884463686
 BoxCollider2D:
