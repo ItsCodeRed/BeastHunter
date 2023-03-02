@@ -149,15 +149,15 @@ public class Malcch : Enemy
             }
         }
 
-        if (!isAgroed)
-        {
-            targetLocation = Vector2.zero;
-        }
-
         if (!attacking)
         {
             animator.Play("Idle");
             transform.localScale = new Vector3(-Mathf.Abs(transform.localScale.x) * Mathf.Sign(body.velocity.x), transform.localScale.y, 1f);
+
+            if (!isAgroed)
+            {
+                targetLocation = Vector2.zero;
+            }
         }
 
         if (!isFlying) return;

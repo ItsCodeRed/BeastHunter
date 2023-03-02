@@ -45,6 +45,13 @@ public class Projectile : MonoBehaviour
             anim.Play(deathAnimation);
         }
         body.isKinematic = true;
+
+        Collider2D col = GetComponent<Collider2D>();
+        if (col != null)
+        {
+            col.enabled = false;
+        }
+
         yield return new WaitForSeconds(deathLength);
         Destroy(gameObject);
     }

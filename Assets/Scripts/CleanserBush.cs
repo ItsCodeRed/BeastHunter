@@ -10,7 +10,7 @@ public class CleanserBush : Herb
     {
         hintText.SetActive(false);
         anim.Play("Pick");
-        GameManager.instance.ChangeAntidote(2);
+        GameManager.instance.ChangeAntidote(3);
         enabled = false;
     }
 }

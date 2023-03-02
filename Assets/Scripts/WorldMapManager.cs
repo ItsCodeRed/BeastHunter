@@ -38,6 +38,7 @@ public class WorldMapManager : MonoBehaviour
     public GameObject zoneArrowPrefab;
 
     public Slider villageFoodBar;
+    public TMP_Text villageFoodPercentage;
 
     public string confirmMovementText;
     public string confirmFightText;
@@ -113,6 +114,7 @@ public class WorldMapManager : MonoBehaviour
         if (GameManager.instance.dayNum == 0)
         {
             villageFoodBar.value = GameManager.instance.villageFood;
+            villageFoodPercentage.text = (GameManager.instance.villageFood * 100) / GameManager.instance.villageFoodMax + "%";
             GameManager.instance.dayNum++;
 
             for (int i = 0; i < smallMonsterTotalCap; i++)
@@ -131,6 +133,7 @@ public class WorldMapManager : MonoBehaviour
 
             GameManager.instance.ChangeVillageFood(-villageFoodPerDay);
             villageFoodBar.value = GameManager.instance.villageFood;
+            villageFoodPercentage.text = (GameManager.instance.villageFood * 100) / GameManager.instance.villageFoodMax + "%";
 
             for (int i = 0; i < previousMap.Count(); i++)
             {

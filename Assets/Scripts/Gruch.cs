@@ -23,6 +23,9 @@ public class Gruch : Enemy
 
     [SerializeField] private HitBox mainAttackHitbox;
 
+    [SerializeField] private AudioSource swipeSound;
+    [SerializeField] private AudioSource deathSound;
+
     private float decisionTimer = 0;
     private bool attacking = false;
     private bool jumping = false;
@@ -138,12 +141,17 @@ public class Gruch : Enemy
 
         bool didHit = false;
 
+        swipeSound.Play();
+
         float timer = 0;
         while (timer < attackLength)
         {
             bool hit = !didHit && Attack(mainAttackHitbox);
             didHit = didHit || hit;
-            if (hit) Player.instance.gameObject.layer = LayerMask.NameToLayer("Invincible");
+            if (hit)
+            {
+                Player.instance.gameObject.layer = LayerMask.NameToLayer("Invincible");
+            }
             timer += Time.deltaTime;
             yield return null;
         }
@@ -182,5 +190,10 @@ public class Gruch : Enemy
         applyHorizontalMovement = false;
         animator.Play("Dead");
         StopAllCoroutines();
+    }
+
+    public void PlayDeathSound()
+    {
+        deathSound.Play();
     }
 }

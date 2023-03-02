@@ -17,6 +17,7 @@ public class Silch : Enemy
     [SerializeField] private Vector2 wallCheckVector;
 
     [SerializeField] AudioSource fireSound;
+    [SerializeField] AudioSource deathSound;
 
     [SerializeField] private HitBox mainAttackHitbox;
 
@@ -129,5 +130,10 @@ public class Silch : Enemy
         applyHorizontalMovement = false;
         animator.Play("Dead");
         StopAllCoroutines();
+    }
+
+    public void PlayDeathSound()
+    {
+        deathSound.Play();
     }
 }

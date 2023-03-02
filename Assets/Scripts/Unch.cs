@@ -19,6 +19,8 @@ public class Unch : Enemy
     [SerializeField] private float jumpDelay;
 
     [SerializeField] private HitBox mainAttackHitbox;
+    [SerializeField] private AudioSource swipeSound;
+    [SerializeField] private AudioSource deathSound;
 
     private float decisionTimer = 0;
     private bool attacking = false;
@@ -126,6 +128,7 @@ public class Unch : Enemy
 
         transform.position += Vector3.Scale(attackLungeMovement, new Vector3(-Mathf.Sign(transform.localScale.x), 1, 1));
         bool didHit = Attack(mainAttackHitbox);
+        swipeSound.Play();
 
         if (didHit) Player.instance.gameObject.layer = LayerMask.NameToLayer("Invincible");
 
@@ -144,5 +147,10 @@ public class Unch : Enemy
         applyHorizontalMovement = false;
         animator.Play("Dead");
         StopAllCoroutines();
+    }
+
+    public void PlayDeathSound()
+    {
+        deathSound.Play();
     }
 }

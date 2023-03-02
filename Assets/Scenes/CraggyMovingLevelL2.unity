@@ -620,43 +620,43 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 6992393217515636273, guid: b47ebe8a3dea9f743b87bd4cc0be871f, type: 3}
       propertyPath: m_AnchorMax.x
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6992393217515636273, guid: b47ebe8a3dea9f743b87bd4cc0be871f, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6992393218003195886, guid: b47ebe8a3dea9f743b87bd4cc0be871f, type: 3}
       propertyPath: m_AnchorMax.x
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6992393218003195886, guid: b47ebe8a3dea9f743b87bd4cc0be871f, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6992393218360423184, guid: b47ebe8a3dea9f743b87bd4cc0be871f, type: 3}
       propertyPath: m_AnchorMax.x
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6992393218360423184, guid: b47ebe8a3dea9f743b87bd4cc0be871f, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6992393218360423184, guid: b47ebe8a3dea9f743b87bd4cc0be871f, type: 3}
       propertyPath: m_AnchorMin.x
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6992393218559616934, guid: b47ebe8a3dea9f743b87bd4cc0be871f, type: 3}
       propertyPath: m_AnchorMax.x
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6992393218559616934, guid: b47ebe8a3dea9f743b87bd4cc0be871f, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6992393218559616934, guid: b47ebe8a3dea9f743b87bd4cc0be871f, type: 3}
       propertyPath: m_AnchorMin.x
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6992393219157957994, guid: b47ebe8a3dea9f743b87bd4cc0be871f, type: 3}
       propertyPath: m_Name
@@ -664,7 +664,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6992393219157957994, guid: b47ebe8a3dea9f743b87bd4cc0be871f, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6992393219157957995, guid: b47ebe8a3dea9f743b87bd4cc0be871f, type: 3}
       propertyPath: monsterManager
@@ -4800,7 +4800,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7321503599199614875, guid: 2f8c711a1eedfb6419fc3e6daa8a690c, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 147.22
+      value: 144.33
       objectReference: {fileID: 0}
     - target: {fileID: 7321503599199614875, guid: 2f8c711a1eedfb6419fc3e6daa8a690c, type: 3}
       propertyPath: m_LocalPosition.y
