@@ -20,6 +20,8 @@ public class Lerch : Enemy
     [SerializeField] private Vector2 wingAttackVel;
 
     [SerializeField] private float launchDelay;
+    [SerializeField] private float callDelay;
+    [SerializeField] private float callDelay2;
     [SerializeField] private float launchLength;
     [SerializeField] private float flySpeed;
     [SerializeField] private float flyHeight;
@@ -50,6 +52,9 @@ public class Lerch : Enemy
     [SerializeField] Collider2D legCollider;
 
     [SerializeField] AudioSource boomSound;
+    [SerializeField] AudioSource wingSound;
+    [SerializeField] AudioSource duckCallSound;
+    [SerializeField] AudioSource throwSound;
 
     private float jumpTimer = 0;
     private bool attacking = false;
@@ -121,6 +126,7 @@ public class Lerch : Enemy
         animator.Play("WingAttack");
         yield return new WaitForSeconds(wingAttackDelay);
 
+        wingSound.Play();
         Attack(wingAttackMainHitbox);
         Attack(wingAttackSecondHitbox);
 
@@ -165,7 +171,15 @@ public class Lerch : Enemy
         attacking = true;
         animator.Play("Launch");
 
-        yield return new WaitForSeconds(launchDelay);
+        yield return new WaitForSeconds(callDelay);
+
+        duckCallSound.Play();
+
+        yield return new WaitForSeconds(callDelay2);
+
+        duckCallSound.Play();
+
+        yield return new WaitForSeconds(launchDelay - callDelay - callDelay2);
 
         Jump();
         applyHorizontalMovement = false;
@@ -200,6 +214,8 @@ public class Lerch : Enemy
 
         yield return new WaitForSeconds(peckBarbDelay);
 
+        throwSound.Play();
+
         Projectile barb = Instantiate(barbPrefab, peckBarbSpawn.position, peckBarbSpawn.rotation);
         barb.body.velocity = Vector2.Scale(peckBarbVel, new Vector2(Mathf.Sign(transform.localScale.x), 1));
         barb.body.gravityScale = 0;
@@ -215,6 +231,8 @@ public class Lerch : Enemy
         attacking = true;
         animator.Play("Barb");
         yield return new WaitForSeconds(barbDelay);
+
+        throwSound.Play();
 
         Projectile barb = Instantiate(barbPrefab, barbSpawn.position, barbSpawn.rotation);
 

@@ -62,6 +62,8 @@ public class PlayerMovement : MonoBehaviour
 
     private void Update()
     {
+        if (Time.timeScale < 1) return;
+
         if (groundTimer > 0)
         {
             groundTimer -= Time.deltaTime;

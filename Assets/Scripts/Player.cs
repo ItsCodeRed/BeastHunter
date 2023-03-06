@@ -259,6 +259,7 @@ public class Player : MonoBehaviour
                 GameManager.instance.ChangeVillageFood(-deathVillageFoodLoss);
                 GameManager.instance.ChangeMeat(-Mathf.CeilToInt(GameManager.instance.meatAmount / deathResourceLoss));
                 GameManager.instance.ChangePotion(-Mathf.CeilToInt(GameManager.instance.potionAmount / deathResourceLoss));
+                GameManager.instance.ChangeAntidote(-Mathf.CeilToInt(GameManager.instance.antidoteAmount / deathResourceLoss));
                 UIManager.instance.DayFinishScreen("You have failed to slay the beast. The village sent a team of medics to save you, at the loss of village resources. The beast ate half of your goods.");
             }
             return true;

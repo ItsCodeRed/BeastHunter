@@ -42,7 +42,7 @@ public class Inventory : MonoBehaviour
     {
         if (Input.mouseScrollDelta.y != 0 && canSelect)
         {
-            int index = Input.mouseScrollDelta.y > 0 ? (((int)selectedItem) + 1) % 3 : (selectedItem == 0 ? 2 : ((int)selectedItem) - 1);
+            int index = Input.mouseScrollDelta.y < 0 ? (((int)selectedItem) + 1) % 3 : (selectedItem == 0 ? 2 : ((int)selectedItem) - 1);
             selectedItem = (InventoryItems)index;
             ChangeSelectFrame();
         }

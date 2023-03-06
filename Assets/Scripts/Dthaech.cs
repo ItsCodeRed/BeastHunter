@@ -44,6 +44,8 @@ public class Dthaech : Enemy
     public Transform legBottom;
 
     [SerializeField] AudioSource boomSound;
+    [SerializeField] AudioSource biteSound;
+    [SerializeField] AudioSource swipeSound;
     [SerializeField] AudioSource fireSound;
 
     private float decisionTimer = 0;
@@ -147,6 +149,7 @@ public class Dthaech : Enemy
 
         yield return new WaitForSeconds(biteDelay);
 
+        biteSound.Play();
         Attack(biteHitbox);
 
         yield return new WaitForSeconds(biteDownTime);
@@ -180,6 +183,7 @@ public class Dthaech : Enemy
 
         yield return new WaitForSeconds(tailDelay);
 
+        swipeSound.Play();
         bool didHit = Attack(tailHitbox);
         if (didHit) Player.instance.gameObject.layer = LayerMask.NameToLayer("Invincible");
 

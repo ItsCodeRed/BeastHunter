@@ -31,6 +31,8 @@ public class Spear : MonoBehaviour
 
     void Update()
     {
+        if (Time.timeScale < 1) return;
+
         transform.parent.right = -Mathf.Sign(transform.parent.parent.localScale.x) * ((Vector2)(Camera.main.ScreenToWorldPoint(Input.mousePosition) - transform.parent.position)).normalized;
         transform.parent.localScale = new Vector3(transform.parent.localScale.x, Mathf.Abs(transform.parent.localScale.y) * transform.parent.up.y > 0 ? 1 : -1, 1);
 
@@ -38,7 +40,7 @@ public class Spear : MonoBehaviour
         {
             spearSlashTimer -= Time.deltaTime;
         }
-        else if (Input.GetMouseButtonDown(0) && spearStabTimer <= 0 && Player.instance.stamina >= spearSlashStamina)
+        else if (Input.GetMouseButton(0) && spearStabTimer <= 0 && Player.instance.stamina >= spearSlashStamina)
         {
             spearSlashTimer = spearSlashCooldown;
             Player.instance.ChangeStamina(-spearSlashStamina);

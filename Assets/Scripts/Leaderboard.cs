@@ -8,7 +8,7 @@ public class Leaderboard : MonoBehaviour
 {
     public PlayerManager playerManager;
 
-    public Animation boardAnim;
+    public Animator boardAnim;
     public TextMeshProUGUI playerNames;
     public TextMeshProUGUI playerScores;
 
@@ -17,7 +17,7 @@ public class Leaderboard : MonoBehaviour
 
     public void ShowLeaderboard(string leaderboardKey)
     {
-        if (!boardAnim.isPlaying)
+        if (boardAnim.GetCurrentAnimatorStateInfo(0).normalizedTime > 1)
         {
             leaderboardShowing = !leaderboardShowing;
 

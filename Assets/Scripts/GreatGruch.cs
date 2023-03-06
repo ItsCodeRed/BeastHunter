@@ -56,6 +56,9 @@ public class GreatGruch : Enemy
 
     [SerializeField] AudioSource boomSound;
     [SerializeField] AudioSource scremSound;
+    [SerializeField] AudioSource swipeSound;
+    [SerializeField] AudioSource spitSound;
+    [SerializeField] AudioSource spikeGroundSound;
 
     private float decisionTimer = 0;
     private bool attacking = false;
@@ -211,6 +214,7 @@ public class GreatGruch : Enemy
 
         yield return new WaitForSeconds(stabDelay);
 
+        swipeSound.Play();
         transform.position += new Vector3(stabRange * Mathf.Sign(transform.localScale.x), 0, 0);
         float timer = 0;
         while (timer < stabLength)
@@ -255,6 +259,7 @@ public class GreatGruch : Enemy
 
         yield return new WaitUntil(() => isGrounded);
 
+        spikeGroundSound.Play();
         Attack(stabGroundHitbox);
 
         bool slashForward = (Player.instance.transform.position.x - transform.position.x) * Mathf.Sign(transform.localScale.x) < 0;
@@ -269,6 +274,7 @@ public class GreatGruch : Enemy
         }
 
         yield return new WaitForSeconds(slashDelay);
+        swipeSound.Play();
 
         float timer = 0;
         while (timer < stabLength)
@@ -292,6 +298,7 @@ public class GreatGruch : Enemy
 
         yield return new WaitForSeconds(spitDelay);
 
+        spitSound.Play();
         Projectile glob = Instantiate(poisonGlob, globSpawn.position, globSpawn.rotation);
         Vector2 displacement = Player.instance.transform.position - globSpawn.position;
 

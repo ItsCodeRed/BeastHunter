@@ -46,6 +46,7 @@ public class Malcch : Enemy
     [SerializeField] private float diveSpinAttackDelay = 0.5f;
     [SerializeField] private float diveSpinAttackDelay2 = 0.5f;
     [SerializeField] private float diveSpinLength = 0.5f;
+    [SerializeField] private float diveSpinSoundInterval = 0.1f;
     [SerializeField] private float diveSpinDownTime = 0.5f;
 
     [Header("Lazer")]
@@ -66,6 +67,10 @@ public class Malcch : Enemy
     [SerializeField] private GameObject diveHitbox;
 
     [SerializeField] AudioSource boomSound;
+    [SerializeField] AudioSource stabSound;
+    [SerializeField] AudioSource swipeSound;
+    [SerializeField] AudioSource spinSound;
+    [SerializeField] AudioSource lazerSound;
 
     private Vector2 targetLocation;
 
@@ -204,6 +209,8 @@ public class Malcch : Enemy
 
         yield return new WaitForSeconds(stabDelay);
 
+        stabSound.Play();
+
         float timer = 0;
         while (timer < stabLength)
         {
@@ -298,9 +305,11 @@ public class Malcch : Enemy
         animator.Play("SpinOnGround");
 
         timer = 0;
+        float soundTimer = 0;
         while (timer < diveSpinAttackDelay + diveSpinLength)
         {
             timer += Time.fixedDeltaTime;
+            soundTimer += Time.fixedDeltaTime;
 
             body.gravityScale = 1;
             targetLocation = Vector2.right * Mathf.Sign(targetLocation.x - transform.position.x) * 999;
@@ -311,6 +320,11 @@ public class Malcch : Enemy
             if (timer > diveSpinAttackDelay)
             {
                 Attack(timer > diveSpinAttackDelay2 ? diveSpinHitbox2 : diveSpinHitbox);
+            }
+            if (soundTimer > diveSpinSoundInterval)
+            {
+                soundTimer = 0;
+                spinSound.Play();
             }
 
             yield return new WaitForFixedUpdate();
@@ -332,6 +346,8 @@ public class Malcch : Enemy
         animator.Play("Swipe");
 
         yield return new WaitForSeconds(swipeDelay);
+
+        swipeSound.Play();
 
         float swipeTimer = 0;
         while (swipeTimer < swipeLength)
@@ -372,6 +388,8 @@ public class Malcch : Enemy
         yield return new WaitForSeconds(lazerDelay);
 
         animator.Play("LazerLoop");
+
+        lazerSound.Play();
 
         lazerInstance = Instantiate(lazerPrefab, lazerOrigin);
         Vector2 pos = (Vector2)Player.instance.transform.position + flyOffset + new Vector2(-randomSide * flybyMinDist, 0);
@@ -420,6 +438,7 @@ public class Malcch : Enemy
 
         yield return new WaitUntil(() => isGrounded);
         tiredHitbox.SetActive(true);
+        boomSound.Play();
     }
 
     private IEnumerator TiredRoutine()
@@ -481,7 +500,6 @@ public class Malcch : Enemy
     {
         yield return FallDownRoutine();
         body.velocity = Vector2.zero;
-        boomSound.Play();
         animator.Play("Dead");
     }
 }

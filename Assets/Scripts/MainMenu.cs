@@ -4,27 +4,44 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using LootLocker.Requests;
+using UnityEngine.SceneManagement;
 
 public class MainMenu : MonoBehaviour
 {
+    public static MainMenu instance = null;
+
+    public string mainMenuScene;
     public string leaderboardKey;
 
-    public Animation anim;
+    public Animator animator;
     public Button continueButton;
     public GameObject mainMenu;
+    public GameObject pauseMenu;
     public GameObject gameOverMenu;
     public TMP_Text gameOverText;
 
+    private bool newGame = false;
+
+    private void Awake()
+    {
+        instance = this;
+    }
+
     private void Start()
     {
-        if (GameManager.instance.dayNum > 0)
+        if (GameManager.instance.dayNum > 0 || newGame)
         {
+            newGame = false;
             continueButton.interactable = true;
-            WorldMapManager.instance.StartGame();
+            if (WorldMapManager.instance != null)
+            {
+                Debug.Log("b");
+                WorldMapManager.instance.StartGame();
+            }
         }
         else
         {
-            mainMenu.SetActive(true);
+            animator.Play("MainMenuActive");
         }
 
         if (GameManager.instance.villageFood == 0)
@@ -59,33 +76,88 @@ public class MainMenu : MonoBehaviour
 
     public void StartGame()
     {
-        anim.Blend("PlayGame");
-        GameManager.instance.playingGame = true;
+        if (!animator.IsInTransition(0) || !animator.GetCurrentAnimatorStateInfo(0).IsName("PlayGame"))
+        {
+            animator.CrossFade("PlayGame", 0.1f);
+        }
+        GameManager.instance.playingGame = Time.timeScale > 0;
     }
 
     public void NewGame()
     {
+        if (WorldMapManager.instance == null)
+        {
+            SceneManager.sceneLoaded += OnSceneLoadedStartGame;
+            SceneManager.LoadScene(mainMenuScene);
+            return;
+        }
+
+        StartNewGameOnWorldMap();
+        WorldMapManager.instance.StartGame();
+    }
+
+    private void OnSceneLoadedStartGame(Scene arg0, LoadSceneMode arg1)
+    {
+        instance.newGame = true;
+        instance.StartNewGameOnWorldMap();
+        SceneManager.sceneLoaded -= OnSceneLoadedStartGame;
+    }
+
+    private void StartNewGameOnWorldMap()
+    {
+        Time.timeScale = 1;
         GameManager.instance.dayNum = 0;
         WorldMapManager.instance.CleanUp();
         GameManager.instance.CleanUp();
-        WorldMapManager.instance.StartGame();
-        anim.Blend("PlayGame");
         GameManager.instance.playingGame = true;
         continueButton.interactable = true;
+
+        if (newGame)
+        {
+            animator.Play("PlayGame");
+            return;
+        }
+
+        if (!animator.IsInTransition(0) || !animator.GetCurrentAnimatorStateInfo(0).IsName("PlayGame"))
+        {
+            animator.CrossFade("PlayGame", 0.1f);
+        }
     }
 
     private void Update()
     {
-        if ((Input.GetKeyDown(KeyCode.Escape) || Input.GetKeyDown(KeyCode.P)) && GameManager.instance.playingGame)
+        if ((Input.GetKeyDown(KeyCode.Escape) || Input.GetKeyDown(KeyCode.P)))
         {
-            ActivateMainMenu();
+            if (WorldMapManager.instance != null)
+            {
+                if (GameManager.instance.playingGame)
+                {
+                    ActivateMainMenu();
+                }
+            }
+            else
+            {
+                Pause();
+            }
         }
+    }
+
+    public void Pause()
+    {
+        Time.timeScale = GameManager.instance.playingGame ? 0 : 1;
+        pauseMenu.SetActive(GameManager.instance.playingGame);
+        GameManager.instance.playingGame = !GameManager.instance.playingGame;
     }
 
     public void ActivateMainMenu()
     {
         mainMenu.SetActive(true);
-        anim.Blend("MainMenu");
+        animator.CrossFade("MainMenu", 0.1f);
         GameManager.instance.playingGame = false;
+    }
+
+    private void OnDestroy()
+    {
+        instance = null;
     }
 }

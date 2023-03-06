@@ -92,7 +92,7 @@ public class Gruch : Enemy
             horizontalMovement = 0;
         }
 
-        if (isGrounded && hasJumped && !jumping)
+        if (isGrounded && hasJumped && !jumping && !attacking)
         {
             hasJumped = false;
             animator.Play("Land");

@@ -158,7 +158,7 @@ public class WorldMapManager : MonoBehaviour
                     }
                     else
                     {
-                        List<Zone> zones = FindMapConnections(i).Where(x => x.type != ZoneType.Village && x.monster == null && x.gameObject.id != GameManager.instance.zoneId).ToList();
+                        List<Zone> zones = FindMapConnections(i).Where(x => x.type != ZoneType.Village && x.monster == null && x != currentZone && x.gameObject.id != GameManager.instance.zoneId).ToList();
                         if (zones.Count > 0)
                         {
                             Zone chosenZone = zones[UnityEngine.Random.Range(0, zones.Count)];
@@ -173,6 +173,15 @@ public class WorldMapManager : MonoBehaviour
                             SpawnMonsterOnMap(chosenZone.monster, chosenZone);
 
                             zone.monster = null;
+                        }
+                        else
+                        {
+                            if (zone.monster.currentHealth >= zone.monster.monsterAsset.maxHealth + (GameManager.instance.dayNum - 2) * GameManager.instance.healthIncrement)
+                            {
+                                zone.monster.currentHealth += GameManager.instance.healthIncrement;
+                            }
+
+                            SpawnMonsterOnMap(zone.monster, zone);
                         }
                     }
                 }
@@ -300,6 +309,14 @@ public class WorldMapManager : MonoBehaviour
                 GameManager.instance.monsters = allMonsters;
                 SceneManager.LoadScene(chosenScenes[UnityEngine.Random.Range(0, chosenScenes.Length)]);
             });
+        }
+    }
+
+    private void OnDestroy()
+    {
+        if (instance == this)
+        {
+            instance = null;
         }
     }
 }
