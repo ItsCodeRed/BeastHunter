@@ -260,6 +260,7 @@ public class GreatGruch : Enemy
         yield return new WaitUntil(() => isGrounded);
 
         spikeGroundSound.Play();
+        Player.instance.CameraShake(3f, 0.4f);
         Attack(stabGroundHitbox);
 
         bool slashForward = (Player.instance.transform.position.x - transform.position.x) * Mathf.Sign(transform.localScale.x) < 0;
@@ -338,5 +339,6 @@ public class GreatGruch : Enemy
     {
         yield return new WaitForSeconds(deathLength);
         boomSound.Play();
+        Player.instance.CameraShake(4f, 0.4f);
     }
 }

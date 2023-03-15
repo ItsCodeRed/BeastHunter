@@ -52,6 +52,8 @@ public class Player : MonoBehaviour
     private bool isDead = false;
     public bool isPoisoned = false;
 
+    private CamFollow cam;
+
     private void Awake()
     {
         if (instance == null)
@@ -62,6 +64,11 @@ public class Player : MonoBehaviour
         {
             Destroy(gameObject);
         }
+    }
+
+    private void Start()
+    {
+        cam = Camera.main.GetComponent<CamFollow>();
     }
 
     private void Update()
@@ -226,6 +233,11 @@ public class Player : MonoBehaviour
         herbing = false;
     }
 
+    public void CameraShake(float power, float time)
+    {
+        cam.ShakeCamera(power, time);
+    }
+
     public void ChangeStamina(int value)
     {
         stamina = Mathf.Clamp(stamina + value, 0, maxStamina);
@@ -252,6 +264,7 @@ public class Player : MonoBehaviour
             if (!noKnockback) movement.Knockback(knockback);
 
             hurtSound.Play();
+            CameraShake(Mathf.Clamp(damage / 15f, 0, 0.66666f), 0.3f);
 
             if (health <= 0 && !isDead)
             {

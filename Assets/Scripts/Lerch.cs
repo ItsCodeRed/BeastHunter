@@ -211,6 +211,7 @@ public class Lerch : Enemy
 
         Attack(peckAttackHitbox);
         boomSound.Play();
+        Player.instance.CameraShake(8f, 0.4f);
 
         yield return new WaitForSeconds(peckBarbDelay);
 
@@ -261,5 +262,6 @@ public class Lerch : Enemy
     {
         yield return new WaitForSeconds(deathLength);
         boomSound.Play();
+        Player.instance.CameraShake(4f, 0.4f);
     }
 }

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Cinemachine;
 
 [RequireComponent(typeof(Camera))]
 public class CamFollow : MonoBehaviour
@@ -12,11 +13,14 @@ public class CamFollow : MonoBehaviour
     public float maxY = 10;
     public float minY = -10;
 
+    [SerializeField] private CinemachineVirtualCamera vCam;
+
     private Camera cam;
 
     private void Awake()
     {
         cam = GetComponent<Camera>();
+        vCam.GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>().m_AmplitudeGain = 0;
     }
 
     public Vector2 GetCameraSize()
@@ -27,6 +31,8 @@ public class CamFollow : MonoBehaviour
     void Update()
     {
         if (Player.instance == null) return;
+
+        vCam.Follow = Player.instance.transform;
 
         Vector2 pos = transform.position;
         Vector2 offset = (Vector2)Player.instance.transform.position - pos;
@@ -43,5 +49,27 @@ public class CamFollow : MonoBehaviour
         pos = new Vector2(Mathf.Clamp(pos.x, minX, maxX), Mathf.Clamp(pos.y, minY, maxY));
 
         transform.position = (Vector3)pos - Vector3.forward * 3;
+    }
+
+    public void ShakeCamera(float power, float time)
+    {
+        StartCoroutine(ShakeCameraRoutine(power, time));
+    }
+
+    private IEnumerator ShakeCameraRoutine(float power, float time)
+    {
+        float timer = time;
+        var noise = vCam.GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>();
+
+        while (timer > 0)
+        {
+            timer -= Time.deltaTime;
+
+            noise.m_AmplitudeGain = power * (timer / time);
+
+            yield return null;
+        }
+
+        noise.m_AmplitudeGain = 0;
     }
 }

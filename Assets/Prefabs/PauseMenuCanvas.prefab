@@ -3603,7 +3603,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mainMenuScene: WorldMap
-  leaderboardKey: leaderboard
+  leaderboardKey: leaderboard2
   animator: {fileID: 3286904700689698940}
   continueButton: {fileID: 5826330765667073700}
   mainMenu: {fileID: 5826330766476453356}
@@ -4538,7 +4538,7 @@ MonoBehaviour:
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: leaderboard
+          m_StringArgument: leaderboard2
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!1 &5826330765241809278

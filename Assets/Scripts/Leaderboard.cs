@@ -53,8 +53,8 @@ public class Leaderboard : MonoBehaviour
 
         if (!playerManager.loggedIn)
         {
-            Debug.LogWarning("Failed to generate leaderboard! ): LootLocker failed to log in.");
-            done = true;
+            Debug.LogWarning("Failed to generate leaderboard! ): LootLocker failed to log in. Waiting for login....");
+            yield return new WaitWhile(() => !playerManager.loggedIn);
         }
 
         LootLockerSDKManager.GetScoreList(key, 100, 0, (response) =>

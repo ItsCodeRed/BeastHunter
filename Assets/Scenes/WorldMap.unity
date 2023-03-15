@@ -902,7 +902,7 @@ MonoBehaviour:
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: leaderboard
+          m_StringArgument: leaderboard2
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!114 &153305059
@@ -2295,7 +2295,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mainMenuScene: 
-  leaderboardKey: leaderboard
+  leaderboardKey: leaderboard2
   animator: {fileID: 414132025}
   continueButton: {fileID: 1939143933}
   mainMenu: {fileID: 1138042805}

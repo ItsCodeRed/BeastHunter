@@ -439,6 +439,7 @@ public class Malcch : Enemy
         yield return new WaitUntil(() => isGrounded);
         tiredHitbox.SetActive(true);
         boomSound.Play();
+        Player.instance.CameraShake(3f, 0.4f);
     }
 
     private IEnumerator TiredRoutine()

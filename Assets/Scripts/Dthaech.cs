@@ -168,6 +168,7 @@ public class Dthaech : Enemy
         transform.position += new Vector3(flipRange * Mathf.Sign(transform.localScale.x), 0, 0);
         Attack(flipHitbox);
         boomSound.Play();
+        Player.instance.CameraShake(8f, 0.4f);
 
         yield return new WaitForSeconds(flipDownTime);
 
@@ -246,5 +247,6 @@ public class Dthaech : Enemy
     {
         yield return new WaitForSeconds(deathLength);
         boomSound.Play();
+        Player.instance.CameraShake(4f, 0.4f);
     }
 }
